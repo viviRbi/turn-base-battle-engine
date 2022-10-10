@@ -5,7 +5,8 @@
 
 define e = Character("Eileen")
 image white = Solid("#fff")
-define p1 = Protaganist(name="Player",level=1, max_hp=12, hp=9, max_mp=8, mp=8, strength=3,element="Water", attack=0,attack_max=0, exp=90)
+define p1 = Protaganist(name="Player", speed = 5, level=1, max_hp=12, hp=9, max_mp=8, mp=8, strength=3,element="Water", attack=0,attack_max=0, exp=90)
+define p2 = Protaganist(name="Friend",speed = 25, level=1, max_hp=12, hp=9, max_mp=8, mp=8, strength=3,element="Water", attack=0,attack_max=0, exp=90)
 
 
 # The game starts here.
@@ -16,6 +17,6 @@ label start:
 
     e "Hi, let's start the battle."
 
-    jump battle
+    call battle
 
     return

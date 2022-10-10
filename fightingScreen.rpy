@@ -1,4 +1,5 @@
 screen FightingScreen:
+    text "{size=14}Turn: [turn]{/turn}    [whoseTurn.name]'s turn"
     frame:
         xpadding 20
         ypadding 20
@@ -24,10 +25,10 @@ screen FightingScreen:
         yalign 1.0
         xsize 70*config.screen_width/100
         ysize 25*config.screen_height/100
-        textbutton "Block" yalign 0.0 action Call("BlockAttack")
-        textbutton "Flee" yalign 0.5 action Call("FleeTheFight")
-        textbutton "Attack" yalign 0.0 xoffset 90 action Show("AttackSkill")
-        textbutton "Item" yalign 0.5 xoffset 90 action Show("ItemScreen")
+        textbutton "Block" yalign 0.0 action Jump("blockAttack")
+        textbutton "Flee" yalign 0.5 action Jump("fleeTheFight")
+        textbutton "Attack" yalign 0.0 xoffset 90 action Show("attackSkill")
+        textbutton "Item" yalign 0.5 xoffset 90 action Show("itemScreen")
 
 screen AttackSkill:
     frame:
@@ -38,8 +39,8 @@ screen AttackSkill:
         xsize 50*config.screen_width/100
         ysize 25*config.screen_height/100
         # skill library then loop
-        textbutton "Water Slash" yalign 0.0 action Hide("AttackSkill"), Show("SelectWhoToAttack")
-        textbutton "Ice lance" yalign 0.5 action Show("SelectWhoToAttack")
+        textbutton "Water Slash" yalign 0.0 action Hide("attackSkill"), Show("selectWhoToAttack")
+        textbutton "Ice lance" yalign 0.5 action Show("selectWhoToAttack")
 screen SelectWhoToAttack:
     frame:
         xpadding 40
@@ -49,6 +50,17 @@ screen SelectWhoToAttack:
         xsize 50*config.screen_width/100
         ysize 25*config.screen_height/100
         text "Select who to attack?" xalign 0 yalign 0
+
+label blockAttack:
+    call endTurn
+    return
+
+label endTurn:
+    $ turn +=1
+    "Blocked"
+    call nextTurn
+    call screen FightingScreen
+
 
     
 
