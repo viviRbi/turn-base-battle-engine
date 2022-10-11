@@ -1,34 +1,55 @@
+'''
+Atk = strength/magic + power of skills/weapon
+Evade = speed + agile
+Hit percent = acc +/- (raining, foggy spell or terrain) - opponent evade. Opponent use= minus. User use = +
+Exp (when hit opp) = (opp level + my level) +12
+Exp (opp killed) = [(opp level + my level)*2 + 35]
+Dammage = Attack - Opp defense +- Buff/Debuff spell
+Crit Damage = Attack x 2 - Opp defense
+'''
+
 init python:
     class Fighter:
-        def __init__(self, name, speed, level=1,max_hp=10,hp=10, max_mp=4, mp=4, element="Normal",strength=0,attack=0,attack_max=0, skills=[]):
+        def __init__(self, name, speed, agile, defense, state, strength, magic, resistance, level=1,max_hp=10,hp=10, max_mp=4, mp=4, element="Normal", skills=[]):
             self.name = name
             self.speed = speed
             self.level = 1
             self.max_hp = max_hp
+            self.agile = agile 
+            self.defense = defense 
+            self.state = state 
+            self.strength = strength 
+            self.magic = magic 
+            self.resistance = resistance
             self.hp = hp
             self.max_mp = max_mp
             self.mp = mp
             self.element = element
-            self.strength = strength
-            self.attack = strength + renpy.random.randint(-4,4)
-            self.attack_max = strength + strength*60/100 + renpy.random.randint(-4,8)
             self.skills =skills
 
     class Protaganist (Fighter):
-        def __init__(self, name, speed, level=1,max_hp=10,hp=4,max_mp=4,mp=4, element="Normal",strength=0,attack=0,attack_max=0, skills=[], exp=0):
-            Fighter.__init__(self,name,speed, level,max_hp,hp, max_mp, mp,element,strength,attack,attack_max, skills)
+        def __init__(self, name, speed, agile, defense, state, strength, magic, resistance,level=1,max_hp=10,hp=4,max_mp=4,mp=4, element="Normal", skills=[], exp=0):
+            Fighter.__init__(self,name,speed, agile, defense, state, strength, magic, resistance, level,max_hp,hp, max_mp, mp, element, skills)
             self.exp=exp
-            if(exp >=100):
-                self.level +=1
-                self.strength += renpy.random.randint(0,4)
         def addExp(self,exp):
             self.exp += exp
 
-label set_up:
-$ skeleton_fire = Fighter(name = "Fire Skeleton", speed=12, level=1, max_hp=12, hp=12, max_mp=0, mp=0, element="Mist",strength=2, attack=5,attack_max=10)
-return
+    class Enemy(Fighter):
+        def __init__(self, name, speed, agile, defense, state, strength, magic, resistance, defeatedEarnedExp, level=1,max_hp=10,hp=4,max_mp=4,mp=4, element="Normal", skills=[]):
+            Fighter.__init__(self,name,speed, agile, defense, state, strength, magic, resistance,level,max_hp,hp, max_mp, mp,element, skills)
+            self.defeatedEarnedExp = defeatedEarnedExp
 
-# Random Number Generator
-label dice_roll:
-$ d_crit_percentage = renpy.random.randint(1, 10)
-return
+    class Skill:
+        def __init__(self, name, power, mp_cost, level_unlocked, acc, element="water", target="single", sfx=None, img=None, usable=False):
+            self.name = name
+            self.power = power
+            self.mp_cost = mp_cost
+            self.element = element
+            self.sfx = sfx
+            self.img = img
+            self.target = target
+            self.acc = acc
+            self.level_unlocked = level_unlocked
+
+
+

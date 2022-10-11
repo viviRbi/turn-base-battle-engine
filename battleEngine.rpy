@@ -10,3 +10,9 @@ init python:
             p = self.protaganists + self.enemies
             sortedParticipants = sorted(p,key=lambda x: x.speed, reverse = True)
             self.participants=sortedParticipants
+
+# Random Number Generator
+label dice_roll:
+    $ d_crit_percentage = renpy.random.randint(1, 10)
+    return
+

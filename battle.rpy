@@ -1,18 +1,18 @@
 label battle:
 
-    call set_up
-
     ## logic here
-    $ protaganists = [p1,p2]
+    python:
+        for skill in main.skills:
+            if main.level >= skill.level_unlocked:
+                skill.usable = True
+
+    $ protaganists = [main,rival]
     $ enemies = [skeleton_fire]
     $ turnList = TurnList(protaganists,enemies)
     $ turn = 1
     $ whoseTurn = turnList.participants[turn-1]
 
-
-
     call screen FightingScreen
-
     return
 
 label nextTurn:
