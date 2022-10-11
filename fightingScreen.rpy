@@ -1,5 +1,5 @@
 screen FightingScreen:
-    text "{size=14}Turn: [turn]{/turn}    [whoseTurn.name]'s turn  [main.skills[0]]" # 
+    text "{size=14}Turn: [turn]{/turn}    [whoseTurn.name]'s turn"
     if type(whoseTurn) == Protaganist:
         frame:
             xpadding 20
@@ -15,10 +15,10 @@ screen FightingScreen:
                 ypadding 5
                 xsize 80 
                 ysize 80
-            text "{size=14}Attr [whoseTurn.element]{/size}" yalign 1.0 xalign 0.0  ypos 110 xpos 0 
+            text "{size=14}Level [whoseTurn.level] [whoseTurn.element]{/size}" yalign 1.0 xalign 0.0  ypos 110 xpos 0 
             text "HP   [whoseTurn.hp]/[whoseTurn.max_hp]" yalign 0.0 xalign 0.0 xpos 100
-            text "MP   [whoseTurn.hp]/[whoseTurn.max_hp]" yalign 0.5 xalign 0.0 xpos 100
-            text "Well rested" yalign 1.0 xalign 0.0 xpos 100
+            text "MP   [whoseTurn.mp]/[whoseTurn.max_mp]" yalign 0.5 xalign 0.0 xpos 100
+            text "[whoseTurn.state]" yalign 1.0 xalign 0.0 xpos 100
         frame:
             xpadding 40
             ypadding 20
@@ -41,7 +41,6 @@ screen FightingScreen:
             xsize config.screen_width
             ysize 25*config.screen_height/100 
             
-            #image "gui/textbox.png" xsize config.screen_width ysize 50 xalign 0.0 yalign 1.0
             imagebutton:
                 xalign 0.0
                 yalign 1.0
@@ -61,10 +60,23 @@ screen attackSkill:
         xsize 50*config.screen_width/100
         ysize 25*config.screen_height/100
         # skill library then loop
-
-        for skill in main.skills:
-            textbutton "[skill.name]" yalign 0.0 xalign 0.0 action Hide("attackSkill"), Show("selectWhoToAttack")
-        
+        python:
+            usableSkills = []
+            for skill in whoseTurn.skills:
+                if whoseTurn.level >= skill.level_unlocked:
+                    usableSkills.append(skill)
+        $gridRows =  len(usableSkills)/2 if len(usableSkills)%2 ==0 else len(usableSkills)/2 + 1
+        viewport:
+            scrollbars "vertical"
+            mousewheel True
+            draggable True
+            side_yfill True
+            grid 2 gridRows:
+                for skill in usableSkills:
+                    textbutton "[skill.name]" action Hide("attackSkill"), Show("selectWhoToAttack")
+                if len(usableSkills)%2 ==1:
+                    text ""
+            
 
 screen SelectWhoToAttack:
     frame:

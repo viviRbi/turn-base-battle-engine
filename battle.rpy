@@ -1,5 +1,4 @@
 label battle:
-
     ## logic here
     python:
         for skill in main.skills:

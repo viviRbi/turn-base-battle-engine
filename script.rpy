@@ -22,20 +22,21 @@ define absFreezing = Skill(name="Absolute Freezing",   power=40, mp_cost=70,   l
 
 ## ------------------------------------------------------------------- Status dictionary
 define status = {
-    'wr': 'Well rested', 
-    't': 'tired',
-    'p':'poison',
-    'f': 'freeze',
-    'n': 'normal'
+    'wr': 'Well Rested', 
+    't': 'Tired',
+    'p':'Poison',
+    'f': ' Freeze',
+    'n': 'Normal'
 }
 
 ## ------------------------------------------------------------------- Each char skills
 define mainSkills = [liquification, dashingBreeze, drowningBubble, waterBlast, whisperingSound, dancingStorm, oceanRhythm, roaringTyphoon, tiamatInferno, ultimateSheild, absFreezing]
+define rivalSkills = [liquification, dashingBreeze, drowningBubble, waterBlast, whisperingSound]
 
 ## ------------------------------------------------------------------- Charactera
-define main = Protaganist(name="Player", speed = 25, agile=10, defense=5, state= status['wr'], strength=3, magic=25, resistance=20,level=1, max_hp=12, hp=12, max_mp=8, mp=8, element="Water", exp=90, skills=mainSkills)
-
-define rival = Protaganist(name="Friend",speed = 7, agile=4, defense=20, state = status['t'], strength=20, magic=3, resistance=3, level=1, max_hp=12, hp=9, max_mp=8, mp=8 ,element="Fire", exp=90)
+#name, speed, agile, defense, state, strength, magic, resistance,level=1,max_hp=10,hp=4,max_mp=4,mp=4, element="Normal", skills=[], exp=0
+define main = Protaganist(name="Main", speed = 25, agile=10, defense=5, state= status['wr'], strength=3, magic=25, resistance=20,level=8, max_hp=12, hp=12, max_mp=8, mp=8, element="Wfdgf", skills=mainSkills, exp=90)
+define rival = Protaganist(name="Friend",speed = 7, agile=4, defense=20, state = status['t'], strength=20, magic=3, resistance=3, level=14, max_hp=12, hp=9, max_mp=8, mp=8 ,element="Fire", skills=rivalSkills, exp=0)
 define skeleton_fire = Enemy(name = "Fire Skeleton", speed = 8, agile=6, defense=4, state= status['n'], strength=5, magic=8, resistance=5, defeatedEarnedExp =5, level=1, max_hp=12, hp=12, max_mp=0, mp=0, element="Mist")
 
 
