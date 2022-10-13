@@ -1,5 +1,20 @@
 screen FightingScreen:
-    text "{size=14}Turn: [turn]{/turn}    [whoseTurn.name]'s turn"
+    text "{size=14}Turn: [turn]{/size}    [whoseTurn.name]'s turn "
+    $pos = 30
+    # show list of hero team top left vertically
+    for i in protaganistsInThisFight:
+        $pos +=51
+        frame:
+            xalign 0.0
+            yalign 0.0
+            xsize 160
+            ysize 50
+            yoffset pos
+            background Solid("#101000")
+            text "{size=14}[i.name] {/size} "
+            text "{size=9}[i.state] {/size} " yalign 1.0
+            text "{size=14}HP: [i.hp]/[i.max_hp] {/size}" xoffset 60
+            text "{size=14}MP: [i.mp]/[i.max_mp] {/size}" xoffset 60 yalign 1.0
     if type(whoseTurn) == Protaganist:
         frame:
             xpadding 20
@@ -28,9 +43,9 @@ screen FightingScreen:
             ysize 25*config.screen_height/100
             textbutton "Block" yalign 0.0 action Jump("blockAttack")
             textbutton "Item" yalign 0.5 action Show("ItemScreen")
-            textbutton "Flee" yalign 1.0 action Jump("fleeTheFight")
+            textbutton "Flee" yalign 1.0 action [Hide("AttackSkillScreen"), Jump("fleeTheFight")]
             textbutton "Attack" yalign 0.0 xoffset 90 action Jump("endTurn")
-            textbutton "Skills" yalign 0.5 xoffset 90 action Show("attackSkill")
+            textbutton "Skills" yalign 0.5 xoffset 90 action ToggleScreen("AttackSkillScreen")
     else:
         frame:
             xpadding 0
@@ -51,7 +66,7 @@ screen FightingScreen:
             text "[whoseTurn.name] attacks." yalign 0.3 xalign 0.5 
 
 
-screen attackSkill:
+screen AttackSkillScreen:
     frame:
         xpadding 40
         ypadding 20
@@ -73,12 +88,12 @@ screen attackSkill:
             side_yfill True
             grid 2 gridRows:
                 for skill in usableSkills:
-                    textbutton "[skill.name]" action Hide("attackSkill"), Show("selectWhoToAttack")
+                    textbutton "[skill.name]" action Hide("attackSkill"), Show("SelectWhoToAttackScreen")
                 if len(usableSkills)%2 ==1:
                     text ""
             
 
-screen SelectWhoToAttack:
+screen SelectWhoToAttackScreen:
     frame:
         xpadding 40
         ypadding 20
@@ -87,13 +102,19 @@ screen SelectWhoToAttack:
         xsize 50*config.screen_width/100
         ysize 25*config.screen_height/100
         text "Select who to attack?" xalign 0 yalign 0
+        textbutton "Back" action Hide("SelectWhoToAttackScreen") xalign 0 yalign 0.5
 
 label blockAttack:
     "[whoseTurn.name] blocked the attack."
     call endTurn
     return
+
 label fleeTheFight:
     "[whoseTurn.name] flee the fight."
+    "Game reset"
+    show white 
+    pause .5
+    hide white
     call chooseWhoToFightWith
 
 label enemyAttack:
@@ -105,6 +126,13 @@ label endTurn:
     $ turn +=1
     call nextTurn
     call screen FightingScreen
+    return
+
+label nextTurn:
+    if turn > len(turnList.participants):
+        $whoseTurn =  turnList.participants[turn % len(turnList.participants)-1]
+    else: 
+        $ whoseTurn = turnList.participants[turn-1]
     return
 
 

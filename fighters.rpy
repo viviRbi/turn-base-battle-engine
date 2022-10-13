@@ -1,16 +1,20 @@
 '''
-Atk = strength/magic + power of skills/weapon
+Atk = Strength/Magic + power of AttackSkills +/- (raining, foggy spell or terrain) 
+Combo Magic Strength Atk = (Magic + Strength)/2 + power of skills
 Evade = speed + agile
-Hit percent = acc +/- (raining, foggy spell or terrain) - opponent evade. Opponent use= minus. User use = +
+Double attack percent = player speed - opponent speed
+Hit percent = acc*4 +/- (raining, foggy spell or terrain) - opponent evade. Opponent use terrain magic for your area = minus. User use = +
 Exp (when hit opp) = (opp level + my level) +12
 Exp (opp killed) = [(opp level + my level)*2 + 35]
-Dammage = Attack - Opp defense +- Buff/Debuff spell
+Damage = Attack - Opp defense +- Buff/Debuff spell
 Crit Damage = Attack x 2 - Opp defense
+State effect evade = agile +/- (raining, foggy spell or terrain)
+
 '''
 
 init python:
     class Fighter:
-        def __init__(self, name, speed, agile, defense, state, strength, magic, resistance, level,max_hp=10,hp=10, max_mp=4, mp=4, element="Normal", skills=[]):
+        def __init__(self, name, speed, agile, defense, state, strength, magic, resistance, acc, level,max_hp=10,hp=10, max_mp=4, mp=4, element="Normal", skills=[]):
             self.name = name
             self.speed = speed
             self.level = level
@@ -20,6 +24,7 @@ init python:
             self.state = state 
             self.strength = strength 
             self.magic = magic 
+            this.acc = acc
             self.resistance = resistance
             self.hp = hp
             self.max_mp = max_mp
@@ -28,15 +33,15 @@ init python:
             self.skills =skills
 
     class Protaganist (Fighter):
-        def __init__(self, name, speed, agile, defense, state, strength, magic, resistance,level,max_hp=10,hp=4,max_mp=4,mp=4, element="Normal", skills=[], exp=0):
-            Fighter.__init__(self,name,speed, agile, defense, state, strength, magic, resistance, level,max_hp,hp, max_mp, mp, element, skills)
+        def __init__(self, name, speed, agile, defense, state, strength, magic, resistance, acc, level,max_hp=10,hp=4,max_mp=4,mp=4, element="Normal", skills=[], exp=0):
+            Fighter.__init__(self,name,speed, agile, defense, state, strength, magic, acc, resistance, level,max_hp,hp, max_mp, mp, element, skills)
             self.exp=exp
         def addExp(self,exp):
             self.exp += exp
 
     class Enemy(Fighter):
-        def __init__(self, name, speed, agile, defense, state, strength, magic, resistance, defeatedEarnedExp, level,max_hp=10,hp=4,max_mp=4,mp=4, element="Normal", skills=[]):
-            Fighter.__init__(self,name,speed, agile, defense, state, strength, magic, resistance,level,max_hp,hp, max_mp, mp,element, skills)
+        def __init__(self, name, speed, agile, defense, state, strength, magic, resistance, acc, efeatedEarnedExp, level,max_hp=10,hp=4,max_mp=4,mp=4, element="Normal", skills=[]):
+            Fighter.__init__(self,name,speed, agile, defense, state, strength, magic, resistance, acc, level,max_hp,hp, max_mp, mp,element, skills)
             self.defeatedEarnedExp = defeatedEarnedExp
 
     class Skill:

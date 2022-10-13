@@ -9,7 +9,7 @@ screen ChooseWhoToFightWithScreen:
         ysize 40*config.screen_height/100
         # https://www.renpy.org/doc/html/screen_actions.html
         $gridRows =  len(usableProtaganistAsideFromMain)/4 if len(usableProtaganistAsideFromMain)%2 ==0 else len(usableProtaganistAsideFromMain)/4 + 1
-        textbutton "Use previous party member." action Return()
+        text "Available party members" xalign 0.5
         grid 4 gridRows yoffset 50:
             spacing 10
             for member in usableProtaganistAsideFromMain:
@@ -25,7 +25,7 @@ screen ChooseWhoToFightWithScreen:
                     textbutton "{size=12}Status{/size}" action Show("StatusScreen", member=member) xalign 0.0 yalign 1.0
             if len(usableProtaganistAsideFromMain)%2 ==1:
                 text ""
-        textbutton "Done" xalign 1.0 yalign 1.0 action Return()
+        textbutton "Done" xalign 1.0 yalign 1.0 action Jump("battle")
 
 screen StatusScreen(member=member):
     frame:
