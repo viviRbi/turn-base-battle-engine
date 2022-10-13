@@ -15,7 +15,7 @@ screen FightingScreen:
                 ypadding 5
                 xsize 80 
                 ysize 80
-            text "{size=14}Level [whoseTurn.level] [whoseTurn.element]{/size}" yalign 1.0 xalign 0.0  ypos 110 xpos 0 
+            text "{size=14}Lvl [whoseTurn.level] [whoseTurn.element]{/size}" yalign 1.0 xalign 0.0  ypos 110 xpos 0 
             text "HP   [whoseTurn.hp]/[whoseTurn.max_hp]" yalign 0.0 xalign 0.0 xpos 100
             text "MP   [whoseTurn.mp]/[whoseTurn.max_mp]" yalign 0.5 xalign 0.0 xpos 100
             text "[whoseTurn.state]" yalign 1.0 xalign 0.0 xpos 100
@@ -27,7 +27,7 @@ screen FightingScreen:
             xsize 70*config.screen_width/100
             ysize 25*config.screen_height/100
             textbutton "Block" yalign 0.0 action Jump("blockAttack")
-            textbutton "Item" yalign 0.5 action Show("itemScreen")
+            textbutton "Item" yalign 0.5 action Show("ItemScreen")
             textbutton "Flee" yalign 1.0 action Jump("fleeTheFight")
             textbutton "Attack" yalign 0.0 xoffset 90 action Jump("endTurn")
             textbutton "Skills" yalign 0.5 xoffset 90 action Show("attackSkill")
@@ -92,6 +92,9 @@ label blockAttack:
     "[whoseTurn.name] blocked the attack."
     call endTurn
     return
+label fleeTheFight:
+    "[whoseTurn.name] flee the fight."
+    call chooseWhoToFightWith
 
 label enemyAttack:
     "[whoseTurn.name] use ABC skill on ABC. ABC lost 10 hp"
