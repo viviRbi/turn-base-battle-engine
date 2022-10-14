@@ -1,20 +1,50 @@
 screen FightingScreen:
     text "{size=14}Turn: [turn]{/size}    [whoseTurn.name]'s turn "
-    $pos = 30
+    $pos = 5
     # show list of hero team top left vertically
     for i in protaganistsInThisFight:
-        $pos +=51
+        $pos +=50
         frame:
             xalign 0.0
             yalign 0.0
             xsize 160
-            ysize 50
+            ysize 45
             yoffset pos
             background Solid("#101000")
-            text "{size=14}[i.name] {/size} "
+            text "{size=12}[i.name] {/size} "
             text "{size=9}[i.state] {/size} " yalign 1.0
-            text "{size=14}HP: [i.hp]/[i.max_hp] {/size}" xoffset 60
-            text "{size=14}MP: [i.mp]/[i.max_mp] {/size}" xoffset 60 yalign 1.0
+            text "{size=10}HP: [i.hp]/[i.max_hp] {/size}" xoffset 60
+            text "{size=10}MP: [i.mp]/[i.max_mp] {/size}" xoffset 60 yalign 1.0
+        # show list of enemy team top right vertically 
+        frame:
+            xalign 1.0
+            yalign 0.0
+            xsize 160
+            ysize 62*config.screen_height/100
+            vpgrid:
+                scrollbars "vertical"
+                mousewheel True
+                draggable True
+                cols 1
+                rows len(enemies)
+                spacing 5
+                xalign 1.0
+                yalign 0.0
+                yoffset 10
+                for j in enemies:
+                    frame:
+                        xalign 1.0
+                        yalign 0.0
+                        xsize 160
+                        ysize 50
+                        if whoseTurn.name == i.name and whoseTurn.element == i.element:
+                            xsize 170
+                        background Solid("#101000")
+                        text "{size=11}[j.element] [j.name] {/size} " yalign 0.0
+                        text "{size=9}[j.state] {/size} " yalign 0.5 yoffset 7
+                        text "{size=10}HP: [j.hp]/[j.max_hp] {/size}" xoffset 80 yalign 0.5 yoffset 7
+                        text "{size=10}MP: [j.mp]/[j.max_mp] {/size}" xoffset 80 yalign 1.0 yoffset 5
+
     if type(whoseTurn) == Protaganist:
         frame:
             xpadding 20
@@ -55,7 +85,6 @@ screen FightingScreen:
             background Solid("#00000000")
             xsize config.screen_width
             ysize 25*config.screen_height/100 
-            
             imagebutton:
                 xalign 0.0
                 yalign 1.0
@@ -63,7 +92,7 @@ screen FightingScreen:
                 focus_mask None
                 idle "gui/textbox.png"
                 action Jump("enemyAttack")
-            text "[whoseTurn.name] attacks." yalign 0.3 xalign 0.5 
+            text "[whoseTurn.element] [whoseTurn.name] attacks." yalign 0.3 xalign 0.5 
 
 
 screen AttackSkillScreen:
@@ -78,7 +107,7 @@ screen AttackSkillScreen:
         python:
             usableSkills = []
             for skill in whoseTurn.skills:
-                if whoseTurn.level >= skill.level_unlocked:
+                if whoseTurn.level >= skill.unlocked_atLevel:
                     usableSkills.append(skill)
         $gridRows =  len(usableSkills)/2 if len(usableSkills)%2 ==0 else len(usableSkills)/2 + 1
         viewport:
@@ -118,7 +147,7 @@ label fleeTheFight:
     call chooseWhoToFightWith
 
 label enemyAttack:
-    "[whoseTurn.name] use ABC skill on ABC. ABC lost 10 hp"
+    "[whoseTurn.element] [whoseTurn.name] use ABC skill on ABC. ABC lost 10 hp [whoseTurn.element]"
     call endTurn
     return
 
